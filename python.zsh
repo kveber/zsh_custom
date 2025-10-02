@@ -1,5 +1,8 @@
+# @cat: python
+# @desc: Utilitários para ambientes virtuais e qualidade de código
 # Python helpers
 unalias python-init 2>/dev/null
+# @desc: Cria/ativa .venv e instala requirements.txt
 python-init() {
   if [[ ! -d .venv ]]; then
     python -m venv .venv || return 1
@@ -10,9 +13,10 @@ python-init() {
   fi
 }
 
+# @desc: Alias para python-init
 alias pyinit='python-init'
 
-# Cria e ativa venv com pyenv
+# @desc: Cria e ativa venv com pyenv
 py-venv() {
   if [ -z "$1" ]; then
     echo "Uso: py-venv <python_version>"
@@ -23,8 +27,8 @@ py-venv() {
   pyenv activate venv-"$1"
 }
 
-# Checar qualidade
+# @desc: Checa flake8/black/mypy
 alias pycheck="flake8 . && black --check . && mypy ."
 
-# Corrigir formatação
+# @desc: Aplica black e isort
 alias pyfix="black . && isort ."

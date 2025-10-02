@@ -35,6 +35,29 @@ Each .zsh file is automatically loaded by the installer.
 
 ⸻
 
+## 🔎 Help (auto-doc)
+
+Use `zhelp` to list available commands and aliases from this folder with their descriptions. It supports categories via `@cat:`; default category is the filename.
+
+Recommended comment pattern:
+
+```zsh
+# @cat: kubernetes
+# @desc: Lista pods de todos os namespaces
+alias ktop='kubectl top pods --all-namespaces'
+
+# @cat: utils
+# @desc: Libera uma porta ocupada com confirmação
+ports() { ... }
+```
+
+Run:
+
+```zsh
+zhelp            # lista tudo
+zhelp docker     # filtra por nome
+```
+
 ⚡ Installation
 
 1.	Clone the repo:

@@ -1,11 +1,13 @@
+# @cat: utils
+# @desc: Utilitários gerais (ex.: gerenciamento de portas)
 # Atalhos rápidos de dev
 
 ## Docker/Kubernetes aliases moved to dedicated files (docker.zsh, k8s.zsh)
 
-# Python
-alias pyinit="python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
+# Python (migrado para python.zsh)
 
 # ---------------------------------------------------
+# @desc: Gerencia portas (listar, identificar e liberar)
 # PORTS: ver e liberar portas
 # ---------------------------------------------------
 

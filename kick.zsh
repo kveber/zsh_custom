@@ -1,6 +1,6 @@
+# @cat: macos
+# @desc: Desconecta usuários no macOS via launchctl (com confirmações)
 # Função: kick
-# Desconecta usuários do macOS via launchctl
-# Suporta: --help, --list, --all, --dry-run, username ou UID
 
 kick() {
   [[ "$OSTYPE" == darwin* ]] || { echo "Somente macOS."; return 1; }

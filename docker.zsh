@@ -1,3 +1,5 @@
+# @cat: docker
+# @desc: Atalhos para Docker e docker compose
 # Docker
 
 # Se o binário docker não existe, sai silenciosamente
@@ -11,10 +13,14 @@ if ! docker info &>/dev/null; then
 fi
 
 
+# @desc: Alias curto para docker
 alias d="docker"
+# @desc: Alias curto para docker compose
 alias dc="docker compose"
+# @desc: Lista containers com nome, status e portas
 alias dps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
 
+# @desc: Para todos os containers em execução
 unalias dstop 2>/dev/null
 dstop() {
   local ids

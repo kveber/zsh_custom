@@ -1,9 +1,8 @@
+# @cat: browsers
+# @desc: Abre Chrome em modo dev (desabilita segurança); use só para testes
 # Script: chrome-dev
-# Abre o Google Chrome em modo desenvolvedor sem restrições de segurança
-# ⚠️ Use apenas para testes de desenvolvimento!
 
 chrome-dev() {
-  CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
   PROFILE_DIR="$HOME/.chrome-dev-profile"
 
   # Cores
