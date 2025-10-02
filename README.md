@@ -1,72 +1,147 @@
-### Scripts personalizados do Zsh (`~/.zsh_custom`)
+# zsh_custom
 
-**Objetivo**: centralizar aliases e funções em arquivos `.zsh` dentro de `~/.zsh_custom`, carregados automaticamente pelo `~/.zshrc`.
+Custom **Zsh scripts and functions** for productivity 🚀  
+This repository contains modular `.zsh` files that extend your shell with aliases, functions, and utilities I use daily.  
+It’s designed to be **simple to install**, **easy to extend**, and hopefully useful for others too.
 
-O instalador (`install.sh`) adiciona ao `~/.zshrc` o bloco abaixo (uma única vez) e recarrega a configuração:
+---
 
-```zsh
-# Importa funções personalizadas de ~/.zsh_custom
-for f in ~/.zsh_custom/*.zsh; do
-  source "$f"
-done
-```
+## 🎯 Overview
 
-### Instalação
+- 📁 Organized by topic: Docker, Kubernetes, Python, Node.js, Cloud, etc.  
+- 🛠️ Automatic installer (`install.sh`) that hooks into your `.zshrc`.  
+- 🧩 Modular design: each `.zsh` file is loaded independently.  
 
-```bash
+Whether you want shortcuts for Git/Docker, Kubernetes helpers, or Python utilities, you can plug them in without editing your `.zshrc` manually.
+
+---
+
+## 📂 Repository Structure
+
+.
+├── install.sh            # Installer script
+├── docker.zsh            # Docker aliases and functions
+├── k8s.zsh               # Kubernetes helpers
+├── node.zsh              # Node.js / npm shortcuts
+├── python.zsh            # Python utilities
+├── cloud.zsh             # Cloud (AWS/GCP/etc.) helpers
+├── utils.zsh             # Generic utility functions
+├── functions.zsh         # General functions
+└── aliases.zsh           # Global aliases
+
+Each `.zsh` file is automatically loaded by the installer.
+
+---
+
+## ⚡ Installation
+
+1. Clone the repo:
+
+   ```bash
+   git clone https://github.com/kveber/zsh_custom.git ~/.zsh_custom
+
+	2.	Make the installer executable:
+
 chmod +x ~/.zsh_custom/install.sh
+
+
+	3.	Run the installer:
+
 ~/.zsh_custom/install.sh
-# para aplicar no shell atual
+
+The script will:
+	•	Add a block to your ~/.zshrc that sources all .zsh files inside ~/.zsh_custom.
+	•	Ensure no duplicates are added.
+	•	Reload your shell.
+
+	4.	Reload Zsh immediately:
+
 source ~/.zshrc
-```
 
-### Como usar
 
-- **Adicionar scripts**: crie arquivos terminando em `.zsh` dentro de `~/.zsh_custom`.
-- **Exemplo** `~/.zsh_custom/meus-aliases.zsh`:
 
-```zsh
+⸻
+
+🛠 Usage
+	•	Add new scripts: just drop a new .zsh file inside ~/.zsh_custom.
+Example: ~/.zsh_custom/my_aliases.zsh
+
 alias gs='git status -sb'
 
-minha_funcao() {
-  echo "Olá $1"
+greet() {
+  echo "Hello, $1"
 }
-```
 
-- **Aplicar mudanças**:
 
-```bash
-source ~/.zshrc   # ou reinicie o terminal
-```
+	•	Check if loaded:
 
-- **Verificar carregamento**:
-
-```bash
-types minha_funcao
+type greet
 alias gs
-```
 
-### Desinstalação (remover o bloco do ~/.zshrc)
 
-```bash
-cp ~/.zshrc ~/.zshrc.before_custom.bak
-sed -i '' '/# Importa funções personalizadas de ~/.zsh_custom/,+3 d' ~/.zshrc
-source ~/.zshrc
-```
+	•	Remove integration:
+Edit ~/.zshrc and remove the block that sources ~/.zsh_custom.
 
-### Observações
+⸻
 
-- **Idempotente**: o instalador não duplica o bloco no `~/.zshrc`.
-- **Compatibilidade**: se o instalador rodar fora do zsh, ele recarrega o `~/.zshrc` via `zsh` para evitar erros (ex.: `fpath`).
-- **Ordem de carregamento**: arquivos são carregados em ordem alfabética; use prefixos numéricos se precisar de ordem explícita.
-- **Estrutura sugerida**:
+🔄 Load Order
+	•	Files are loaded alphabetically.
+	•	If you need to control order, prefix filenames (01_docker.zsh, 02_k8s.zsh).
+	•	Scripts can also include conditional logic, e.g.:
 
-```
-~/.zsh_custom/
-  install.sh
-  aliases.zsh
-  functions.zsh
-  k8s.zsh
-```
+if command -v docker >/dev/null; then
+  source ~/.zsh_custom/docker.zsh
+fi
 
+
+
+⸻
+
+✨ Examples
+
+Depending on which files are enabled, you’ll get:
+	•	🐳 Docker: shortcuts for containers & images.
+	•	☸️ Kubernetes: helper functions for clusters.
+	•	🟢 Node.js: npm/yarn aliases.
+	•	🐍 Python: environment helpers.
+	•	☁️ Cloud: AWS/GCP utilities.
+	•	🔧 Utils: logs, ports, strings, etc.
+
+⸻
+
+🤝 Contributing
+
+Contributions are welcome! Here’s how you can help:
+	1.	Report issues: bugs, typos, missing features.
+	2.	Submit PRs:
+	•	Use descriptive branch names (fix/docker-alias, feature/aws-tools).
+	•	Test before submitting.
+	•	Keep style consistent (indentation, comments).
+	3.	Improve docs: add usage examples, extend this README.
+	4.	Test on multiple systems: Linux, macOS, WSL.
+	5.	Suggest improvements: performance, cross-platform fixes, shell best practices.
+
+⸻
+
+🚀 Future Improvements (Ideas)
+	•	Conditional loading based on available commands.
+	•	Verbose/debug mode to show which files are sourced.
+	•	Add shellcheck linting for cleaner scripts.
+	•	Provide templates for new .zsh modules.
+	•	Release tags & changelog for stable versions.
+	•	Optional plugin manager support (Oh My Zsh, Antigen, etc.).
+
+⸻
+
+📜 License
+
+(Choose a license — e.g., MIT, Apache 2.0, or GPL. If none is specified, it defaults to “all rights reserved.”)
+
+⸻
+
+👤 Author
+
+Kveber
+Maintainer and main user of these Zsh customizations.
+Feel free to open an issue if you have questions or ideas.
 
