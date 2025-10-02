@@ -1,4 +1,5 @@
 # Kubernetes helpers
+command -v kubectl >/dev/null || return
 
 alias k="kubectl"
 alias kgp="kubectl get pods"

@@ -14,4 +14,14 @@ fi
 alias d="docker"
 alias dc="docker compose"
 alias dps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
-alias dstop="docker stop $(docker ps -q)"
+
+unalias dstop 2>/dev/null
+dstop() {
+  local ids
+  ids=(${(f)$(docker ps -q)})
+  if (( ${#ids} == 0 )); then
+    echo "Nada para parar."
+    return 0
+  fi
+  docker stop ${ids[@]}
+}

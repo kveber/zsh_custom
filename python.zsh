@@ -1,5 +1,16 @@
 # Python helpers
-alias python-init="python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
+unalias python-init 2>/dev/null
+python-init() {
+  if [[ ! -d .venv ]]; then
+    python -m venv .venv || return 1
+  fi
+  source .venv/bin/activate
+  if [[ -f requirements.txt ]]; then
+    pip install -r requirements.txt
+  fi
+}
+
+alias pyinit='python-init'
 
 # Cria e ativa venv com pyenv
 py-venv() {

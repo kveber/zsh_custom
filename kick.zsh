@@ -3,6 +3,8 @@
 # Suporta: --help, --list, --all, --dry-run, username ou UID
 
 kick() {
+  [[ "$OSTYPE" == darwin* ]] || { echo "Somente macOS."; return 1; }
+  command -v launchctl >/dev/null || { echo "launchctl não encontrado."; return 1; }
   # Cores
   RED="\033[0;31m"
   GREEN="\033[0;32m"
@@ -53,6 +55,8 @@ kick() {
   if [ "$1" = "--all" ]; then
     current_uid=$(id -u)
     echo -e "${BOLD}Desconectando todos os usuários, exceto o atual (UID $current_uid)...${RESET}"
+    read "?Confirmar? [y/N] " ans
+    [[ "$ans" == [yY]* ]] || { echo "Cancelado."; return 1; }
     users=$(who | awk '{print $1}' | sort -u)
     count=0
 
@@ -95,6 +99,8 @@ kick() {
   if [ $dry_run -eq 1 ]; then
     echo -e " → ${YELLOW}(SIMULAÇÃO)${RESET} Desconectaria usuário ${CYAN}$arg${RESET} (UID ${YELLOW}$uid${RESET})"
   else
+    read "?Desconectar ${arg} (UID ${uid})? [y/N] " ans
+    [[ "$ans" == [yY]* ]] || { echo "Cancelado."; return 1; }
     echo -e "${RED}Desconectando${RESET} usuário ${CYAN}$arg${RESET} (UID ${YELLOW}$uid${RESET})..."
     sudo launchctl bootout "user/$uid"
   fi

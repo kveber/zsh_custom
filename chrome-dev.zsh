@@ -40,8 +40,8 @@ chrome-dev() {
       ;;
   esac
 
-  if [ ! -x "$CHROME_PATH" ]; then
-    echo -e "${RED}Google Chrome não encontrado em $CHROME_PATH${RESET}"
+  if ! command -v open >/dev/null; then
+    echo -e "${RED}Comando 'open' não encontrado (somente macOS).${RESET}"
     return 1
   fi
 
@@ -58,23 +58,21 @@ chrome-dev() {
     url="about:blank"
   fi
 
+  local -a args
+  args=(--disable-web-security --disable-gpu --disable-site-isolation-trials --ignore-certificate-errors --new-window)
   if [ $incognito -eq 1 ]; then
-    "$CHROME_PATH" \
-      --disable-web-security \
-      --disable-gpu \
-      --disable-site-isolation-trials \
-      --ignore-certificate-errors \
-      --no-sandbox \
-      --incognito \
-      --new-window "$url"
+    args+=(--incognito)
   else
-    "$CHROME_PATH" \
-      --disable-web-security \
-      --disable-gpu \
-      --user-data-dir="$PROFILE_DIR" \
-      --disable-site-isolation-trials \
-      --ignore-certificate-errors \
-      --no-sandbox \
-      --new-window "$url"
+    args+=(--user-data-dir="$PROFILE_DIR")
+  fi
+
+  # Tenta abrir com Google Chrome; fallback para Canary/Chromium
+  if ! open -na "Google Chrome" --args ${args[@]} "$url" 2>/dev/null; then
+    if ! open -na "Google Chrome Canary" --args ${args[@]} "$url" 2>/dev/null; then
+      if ! open -na "Chromium" --args ${args[@]} "$url" 2>/dev/null; then
+        echo -e "${RED}Nenhuma instalação do Chrome/Chromium encontrada.${RESET}"
+        return 1
+      fi
+    fi
   fi
 }

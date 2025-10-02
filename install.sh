@@ -16,19 +16,39 @@ if [[ ! -f "${ZSHRC_FILE}.bak" ]] || [[ $(($(date +%s) - $(stat -f %m "${ZSHRC_F
   cp "${ZSHRC_FILE}" "${ZSHRC_FILE}.bak"
 fi
 
-BLOCK_START="# Importa funções personalizadas de ~/.zsh_custom"
-BLOCK_CONTENT=$'\n# Importa funções personalizadas de ~/.zsh_custom\nfor f in ~/.zsh_custom/*.zsh; do\n  source "$f"\ndone\n'
+BEGIN_MARK="# BEGIN ZSH_CUSTOM"
+END_MARK="# END ZSH_CUSTOM"
+BLOCK_CONTENT=$'\n# BEGIN ZSH_CUSTOM\n# Importa funções personalizadas de ~/.zsh_custom\nfor f in ~/.zsh_custom/*.zsh(.N); do\n  source "$f"\ndone\n# END ZSH_CUSTOM\n'
 
-# If similar block already exists (by loop line), skip appending
-if grep -Fq "for f in ~/.zsh_custom/*.zsh; do" "${ZSHRC_FILE}"; then
-  echo "Bloco de ~/.zsh_custom já existe em ${ZSHRC_FILE}."
-else
-  # Add a newline if file does not end with one
-  if [[ -s "${ZSHRC_FILE}" ]] && [[ -n "$(tail -c1 "${ZSHRC_FILE}" || true)" ]]; then
-    echo >> "${ZSHRC_FILE}"
+ACTION="install"
+if [[ "${1-}" == "--uninstall" ]]; then
+  ACTION="uninstall"
+fi
+
+if [[ "$ACTION" == "uninstall" ]]; then
+  if grep -Fq "$BEGIN_MARK" "${ZSHRC_FILE}"; then
+    # Remove block between markers
+    awk -v b="$BEGIN_MARK" -v e="$END_MARK" '
+      BEGIN {skip=0}
+      index($0,b){skip=1; next}
+      index($0,e){skip=0; next}
+      skip==0 {print}
+    ' "${ZSHRC_FILE}" > "${ZSHRC_FILE}.tmp" && mv "${ZSHRC_FILE}.tmp" "${ZSHRC_FILE}"
+    echo "Bloco ZSH_CUSTOM removido de ${ZSHRC_FILE}."
+  else
+    echo "Nenhum bloco ZSH_CUSTOM encontrado em ${ZSHRC_FILE}."
   fi
-  printf "%s" "${BLOCK_CONTENT}" >> "${ZSHRC_FILE}"
-  echo "Bloco adicionado ao ${ZSHRC_FILE}."
+else
+  if grep -Fq "$BEGIN_MARK" "${ZSHRC_FILE}"; then
+    echo "Bloco ZSH_CUSTOM já existe em ${ZSHRC_FILE}."
+  else
+    # Add a newline if file does not end with one
+    if [[ -s "${ZSHRC_FILE}" ]] && [[ -n "$(tail -c1 "${ZSHRC_FILE}" || true)" ]]; then
+      echo >> "${ZSHRC_FILE}"
+    fi
+    printf "%s" "${BLOCK_CONTENT}" >> "${ZSHRC_FILE}"
+    echo "Bloco ZSH_CUSTOM adicionado ao ${ZSHRC_FILE}."
+  fi
 fi
 
 # Reload ~/.zshrc after changes

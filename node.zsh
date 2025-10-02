@@ -1,4 +1,5 @@
 # Node helpers
+command -v nvm >/dev/null || return
 
 # Trocar versão de Node
 alias nvm-use="nvm use"

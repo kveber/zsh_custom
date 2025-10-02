@@ -1,16 +1,6 @@
 # Atalhos rápidos de dev
 
-# Docker
-alias d="docker"
-alias dc="docker compose"
-alias dps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
-alias dstop="docker stop $(docker ps -q)"
-
-# Kubernetes
-alias k="kubectl"
-alias kgp="kubectl get pods"
-alias kgs="kubectl get svc"
-alias kgn="kubectl get nodes"
+## Docker/Kubernetes aliases moved to dedicated files (docker.zsh, k8s.zsh)
 
 # Python
 alias pyinit="python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
@@ -74,8 +64,12 @@ ports() {
       if [ -z "$pid" ]; then
         echo -e "✅ ${GREEN}Nenhum processo encontrado na porta${RESET} ${CYAN}$2${RESET}"
       else
-        echo -e "🛑 ${RED}Matando processo(s)${RESET} na porta ${CYAN}$2${RESET}: ${YELLOW}$pid${RESET}"
-        kill -9 $pid
+        echo -e "🛑 ${RED}Processo(s)${RESET} na porta ${CYAN}$2${RESET}: ${YELLOW}$pid${RESET}"
+        read "?Deseja encerrar esses processos? [y/N] " ans
+        [[ "$ans" == [yY]* ]] || { echo "Cancelado."; return 1; }
+        kill $pid 2>/dev/null || true
+        sleep 1
+        kill -9 $pid 2>/dev/null || true
         echo -e "✅ ${GREEN}Porta${RESET} ${CYAN}$2${RESET} ${GREEN}liberada.${RESET}"
       fi
       ;;

@@ -1,5 +1,8 @@
 # AWS / GCP helpers
 
+command -v aws >/dev/null || echo "Aviso: aws não encontrado" >/dev/null
+command -v gcloud >/dev/null || echo "Aviso: gcloud não encontrado" >/dev/null
+
 # Trocar perfil AWS
 aws-profile() {
   if [ -z "$1" ]; then
